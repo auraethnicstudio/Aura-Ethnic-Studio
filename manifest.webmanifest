@@ -1,0 +1,18 @@
+{
+  "name": "Aura Ethnic Studio",
+  "short_name": "Aura Ethnic",
+  "description": "Premium ethnic wear with simple bundle pricing, free shipping and 14-day returns.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf6",
+  "theme_color": "#241d19",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

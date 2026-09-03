@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://*.workers.dev; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <title>Aura Ethnic Studio — Tracking Admin</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <style>
+    :root{color-scheme:light;--ink:#281d19;--muted:#796a62;--wine:#4b2b25;--cream:#faf5f1;--line:#e6d9d2;--green:#216b51;--amber:#9d5a18;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#ead8cc 0,transparent 32rem),var(--cream);color:var(--ink);min-height:100vh}button,input,select,textarea{font:inherit}.top{align-items:center;display:flex;justify-content:space-between;margin:auto;max-width:1180px;padding:20px}.brand{font:22px Georgia,serif;letter-spacing:.1em}.brand small{display:block;font:700 8px/1.4 Inter,sans-serif;letter-spacing:.18em}.top a{color:var(--wine);font-size:11px;font-weight:800;text-decoration:none}.wrap{margin:auto;max-width:1180px;padding:24px 18px 80px}.hero{text-align:center;margin:20px auto 30px}.hero h1{font:400 clamp(37px,7vw,58px)/1 Georgia,serif;letter-spacing:-.04em;margin:12px 0}.hero p{color:var(--muted);font-size:13px}.panel,.order{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 16px 48px rgba(55,31,25,.08)}.panel{margin:auto;max-width:620px;padding:24px}.login{display:grid;gap:13px}.login label,.field label{color:#5c4940;display:grid;font-size:9px;font-weight:850;gap:7px;letter-spacing:.08em;text-transform:uppercase}input,select,textarea{background:#fffdfa;border:1px solid #d8c7be;border-radius:10px;color:var(--ink);min-height:46px;padding:11px;width:100%}textarea{min-height:82px;resize:vertical}button{background:var(--wine);border:0;border-radius:10px;color:#fff;cursor:pointer;font-size:10px;font-weight:900;letter-spacing:.08em;min-height:46px;padding:11px 16px}button.secondary{background:#eadfd9;color:var(--ink)}button:disabled{cursor:wait;opacity:.6}.bar{align-items:center;display:flex;gap:12px;justify-content:space-between;margin:28px 0 17px}.bar h2{font:400 28px Georgia,serif;margin:0}.bar div{display:flex;gap:8px}.message{color:#a13b35;font-size:12px;line-height:1.6;margin-top:12px;text-align:center}.orders{display:grid;gap:16px}.order{padding:20px}.order-head{align-items:flex-start;display:flex;gap:15px;justify-content:space-between}.order-id{font:700 16px ui-monospace,monospace;margin:0 0 6px}.order-meta{color:var(--muted);font-size:10px;line-height:1.6}.pill{background:#fff0d9;border-radius:999px;color:var(--amber);font-size:8px;font-weight:900;letter-spacing:.08em;padding:7px 9px;text-transform:uppercase}.pill.received{background:#e1f3eb;color:var(--green)}.customer{background:#faf6f3;border-radius:12px;display:grid;font-size:11px;gap:8px;grid-template-columns:repeat(3,minmax(0,1fr));line-height:1.5;margin:16px 0;padding:14px}.customer b{display:block;font-size:9px;letter-spacing:.05em;margin-bottom:3px;text-transform:uppercase}.items{grid-column:1/-1;white-space:pre-wrap}.fields{display:grid;gap:11px;grid-template-columns:repeat(3,minmax(0,1fr))}.wide{grid-column:span 2}.full{grid-column:1/-1}.save-row{align-items:center;display:flex;gap:12px;justify-content:flex-end;margin-top:13px}.saved{color:var(--green);font-size:10px}.empty{background:#fff;border:1px dashed #cebdb4;border-radius:18px;color:var(--muted);padding:34px;text-align:center}[hidden]{display:none!important}@media(max-width:760px){.customer,.fields{grid-template-columns:1fr 1fr}.wide{grid-column:span 2}}@media(max-width:520px){.wrap{padding:12px 12px 55px}.panel,.order{border-radius:16px;padding:17px}.bar{align-items:flex-start;flex-direction:column}.order-head{flex-direction:column}.customer,.fields{grid-template-columns:1fr}.wide,.full,.items{grid-column:1}.save-row{align-items:stretch;flex-direction:column}.save-row button{width:100%}}
+  </style>
+</head>
+<body>
+  <header class="top"><div class="brand">AURA <small>ETHNIC STUDIO</small></div><a href="./">OPEN STORE</a></header>
+  <main class="wrap">
+    <section class="hero"><span>PRIVATE ORDER MANAGEMENT</span><h1>Tracking Admin</h1><p>Confirm payments and keep customers updated from one dashboard.</p></section>
+    <section id="login-panel" class="panel">
+      <form id="login-form" class="login">
+        <label>ADMIN ACCESS KEY<input id="admin-key" type="password" autocomplete="current-password" required></label>
+        <button type="submit">OPEN DASHBOARD</button>
+      </form>
+      <p id="login-message" class="message" role="alert"></p>
+    </section>
+    <section id="dashboard" hidden>
+      <div class="bar"><h2>Customer Orders</h2><div><button id="refresh" class="secondary" type="button">REFRESH</button><button id="logout" type="button">LOCK</button></div></div>
+      <p id="dashboard-message" class="message" role="status"></p>
+      <div id="orders" class="orders"></div>
+    </section>
+  </main>
+  <script src="./tracking-config.js"></script>
+  <script>
+    (function(){
+      "use strict";
+      var origin=String(window.AURA_TRACKING_API_ORIGIN||"").replace(/\/+$/,"");
+      var key="";
+      var loginPanel=document.getElementById("login-panel");
+      var dashboard=document.getElementById("dashboard");
+      var loginMessage=document.getElementById("login-message");
+      var dashboardMessage=document.getElementById("dashboard-message");
+      var ordersNode=document.getElementById("orders");
+
+      function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(ch){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]})}
+      function date(value){var d=new Date(value);return Number.isNaN(d.getTime())?String(value||""):d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}
+      function option(value,label,current){return '<option value="'+value+'"'+(value===current?' selected':'')+'>'+label+'</option>'}
+      function orderCard(order){
+        var card=document.createElement("article");
+        card.className="order";
+        card.dataset.orderId=order.orderId;
+        card.innerHTML='<div class="order-head"><div><p class="order-id">'+esc(order.orderId)+'</p><div class="order-meta">Created '+esc(date(order.createdAt))+'<br>Updated '+esc(date(order.updatedAt))+'</div></div><span class="pill '+(order.paymentStatus==='received'?'received':'')+'">'+esc(order.currentLabel)+'</span></div>'+
+          '<div class="customer"><div><b>Customer</b>'+esc(order.customerName)+'</div><div><b>Phone</b>'+esc(order.phone)+'</div><div><b>Amount</b>₹'+esc(order.orderAmount)+'</div><div><b>Address</b>'+esc(order.address)+', '+esc(order.city)+', '+esc(order.state)+' — '+esc(order.pincode)+'</div><div><b>Email</b>'+esc(order.email||'Not provided')+'</div><div class="items"><b>Items</b>'+esc(order.items)+'</div></div>'+
+          '<div class="fields"><div class="field"><label>Payment<select data-name="paymentStatus">'+option('pending','Payment Pending',order.paymentStatus)+option('received','Payment Received',order.paymentStatus)+'</select></label></div><div class="field wide"><label>Order Status<select data-name="fulfillmentStatus">'+option('order_created','Order Created',order.fulfillmentStatus)+option('dispatch','Dispatch',order.fulfillmentStatus)+option('delivery_partner','Delivery Partner',order.fulfillmentStatus)+option('delivered','Delivered',order.fulfillmentStatus)+'</select></label></div><div class="field"><label>Delivery Partner<input data-name="deliveryPartner" value="'+esc(order.deliveryPartner)+'"></label></div><div class="field"><label>Courier Tracking ID<input data-name="courierTrackingId" value="'+esc(order.courierTrackingId)+'"></label></div><div class="field"><label>Expected Delivery<input data-name="expectedDelivery" value="'+esc(order.expectedDelivery)+'"></label></div><div class="field full"><label>Customer Note<textarea data-name="publicNote">'+esc(order.publicNote)+'</textarea></label></div></div>'+
+          '<div class="save-row"><span class="saved" aria-live="polite"></span><button type="button" data-action="save">SAVE UPDATE</button></div>';
+        card.querySelector('[data-action="save"]').addEventListener("click",function(){save(card)});
+        return card;
+      }
+
+      async function request(path,options){
+        if(!origin)throw new Error("Tracking service is not connected yet.");
+        var response=await fetch(origin+path,Object.assign({},options||{},{headers:Object.assign({"Authorization":"Bearer "+key,"Content-Type":"application/json"},options&&options.headers||{})}));
+        var data={};try{data=await response.json()}catch(error){}
+        if(!response.ok)throw new Error(data.message||"The request could not be completed.");
+        return data;
+      }
+
+      async function load(){
+        dashboardMessage.textContent="Loading orders…";ordersNode.innerHTML="";
+        var data=await request("/api/admin/orders");
+        dashboardMessage.textContent="";
+        if(!data.orders||!data.orders.length){ordersNode.innerHTML='<div class="empty">No customer orders yet.</div>';return}
+        data.orders.forEach(function(order){ordersNode.appendChild(orderCard(order))});
+      }
+
+      async function save(card){
+        var button=card.querySelector('[data-action="save"]'),saved=card.querySelector('.saved');
+        var payload={};card.querySelectorAll('[data-name]').forEach(function(input){payload[input.dataset.name]=input.value.trim()});
+        button.disabled=true;saved.textContent="Saving…";
+        try{var data=await request("/api/admin/orders/"+encodeURIComponent(card.dataset.orderId),{method:"PATCH",body:JSON.stringify(payload)});saved.textContent="Saved";var pill=card.querySelector('.pill');pill.textContent=data.order.currentLabel;pill.classList.toggle('received',data.order.paymentStatus==='received')}
+        catch(error){saved.textContent=error.message||"Could not save"}
+        finally{button.disabled=false}
+      }
+
+      document.getElementById("login-form").addEventListener("submit",async function(event){
+        event.preventDefault();key=document.getElementById("admin-key").value.trim();loginMessage.textContent="";
+        try{await load();loginPanel.hidden=true;dashboard.hidden=false}catch(error){key="";loginMessage.textContent=error.message||"Access denied."}
+      });
+      document.getElementById("refresh").addEventListener("click",function(){load().catch(function(error){dashboardMessage.textContent=error.message})});
+      document.getElementById("logout").addEventListener("click",function(){key="";document.getElementById("admin-key").value="";ordersNode.innerHTML="";dashboard.hidden=true;loginPanel.hidden=false});
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4b2b25">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="index, follow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://*.workers.dev; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <meta name="description" content="Securely track your Aura Ethnic Studio order after payment confirmation.">
+  <title>Track Your Order — Aura Ethnic Studio</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink:#281d19;
+      --muted:#786961;
+      --wine:#4b2b25;
+      --wine-dark:#2d211d;
+      --cream:#faf5f1;
+      --line:#e6d9d2;
+      --green:#216b51;
+      --amber:#9d5a18;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    * { box-sizing:border-box; }
+    body {
+      background:radial-gradient(circle at top right,#ead8cc 0,transparent 31rem),var(--cream);
+      color:var(--ink);
+      margin:0;
+      min-height:100vh;
+    }
+    button,input { font:inherit; }
+    .site-header {
+      align-items:center;
+      display:flex;
+      justify-content:space-between;
+      margin:auto;
+      max-width:1050px;
+      padding:19px 22px;
+    }
+    .brand {
+      color:var(--ink);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:19px;
+      letter-spacing:.08em;
+      text-decoration:none;
+    }
+    .brand small {
+      color:var(--muted);
+      display:block;
+      font:700 8px/1.4 Inter,system-ui,sans-serif;
+      letter-spacing:.18em;
+      margin-top:3px;
+    }
+    .back-link {
+      border-bottom:1px solid #b99c8f;
+      color:var(--wine);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+      padding:7px 0;
+      text-decoration:none;
+    }
+    main {
+      margin:auto;
+      max-width:760px;
+      padding:50px 18px 80px;
+    }
+    .heading { margin:0 auto 29px; max-width:680px; text-align:center; }
+    .eyebrow {
+      color:var(--wine);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.2em;
+    }
+    h1,h2 { font-family:Georgia,"Times New Roman",serif; font-weight:400; }
+    h1 {
+      font-size:clamp(40px,8vw,61px);
+      letter-spacing:-.04em;
+      line-height:1;
+      margin:16px 0;
+    }
+    .heading p {
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+      margin:auto;
+      max-width:590px;
+    }
+    .panel {
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 18px 55px rgba(55,31,25,.09);
+      padding:26px;
+    }
+    form { display:grid; gap:17px; }
+    label {
+      color:#513d36;
+      display:grid;
+      font-size:10px;
+      font-weight:850;
+      gap:7px;
+      letter-spacing:.06em;
+    }
+    input {
+      background:#fffdfa;
+      border:1px solid #d7c5bc;
+      border-radius:11px;
+      color:var(--ink);
+      min-height:51px;
+      outline:none;
+      padding:13px;
+      width:100%;
+    }
+    input:focus {
+      border-color:var(--wine);
+      box-shadow:0 0 0 3px rgba(75,43,37,.1);
+    }
+    button {
+      background:var(--wine);
+      border:0;
+      border-radius:11px;
+      color:#fff;
+      cursor:pointer;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.1em;
+      min-height:52px;
+      padding:12px 18px;
+    }
+    button:disabled { cursor:wait; opacity:.64; }
+    .message {
+      color:var(--muted);
+      font-size:12px;
+      min-height:18px;
+      text-align:center;
+    }
+    .message.error { color:#a13b35; }
+    #result {
+      border-top:1px solid var(--line);
+      margin-top:23px;
+      padding-top:23px;
+    }
+    .locked {
+      background:#fff8ee;
+      border:1px solid #efd6b0;
+      border-radius:16px;
+      padding:23px;
+      text-align:center;
+    }
+    .locked h2 { font-size:27px; margin:13px 0 8px; }
+    .locked p { color:#705b4e; font-size:12px; line-height:1.7; margin:0; }
+    .pill {
+      border-radius:999px;
+      display:inline-flex;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.1em;
+      padding:7px 10px;
+      text-transform:uppercase;
+    }
+    .pill.pending { background:#fff0d9; color:var(--amber); }
+    .pill.received { background:#e1f3eb; color:var(--green); }
+    .result-head {
+      align-items:center;
+      display:flex;
+      gap:13px;
+      justify-content:space-between;
+    }
+    .result-head small { color:var(--muted); font-size:8px; letter-spacing:.14em; }
+    .result-head h2 { font-family:ui-monospace,monospace; font-size:18px; margin:5px 0 0; }
+    .timeline { display:grid; list-style:none; margin:28px 0; padding:0; }
+    .timeline li {
+      align-items:center;
+      color:#a39791;
+      display:grid;
+      gap:12px;
+      grid-template-columns:31px 1fr;
+      min-height:53px;
+      position:relative;
+    }
+    .timeline li:not(:last-child)::before {
+      background:#ddd2cd;
+      content:"";
+      height:23px;
+      left:14px;
+      position:absolute;
+      top:42px;
+      width:2px;
+    }
+    .timeline li span {
+      align-items:center;
+      background:#eee7e3;
+      border-radius:50%;
+      display:flex;
+      font-size:11px;
+      height:31px;
+      justify-content:center;
+      width:31px;
+    }
+    .timeline li.done { color:var(--ink); }
+    .timeline li.done span,.timeline li.done:not(:last-child)::before { background:var(--wine); color:#fff; }
+    .details {
+      background:#f8f3f0;
+      border-radius:13px;
+      display:grid;
+      gap:13px;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      padding:17px;
+    }
+    .details small,.details b { display:block; }
+    .details small { color:var(--muted); font-size:8px; margin-bottom:5px; text-transform:uppercase; }
+    .details b { font-size:11px; overflow-wrap:anywhere; }
+    .note { border-left:3px solid var(--wine); color:#5d4a42; font-size:11px; line-height:1.6; padding-left:12px; }
+    .updated,.help {
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.6;
+      text-align:center;
+    }
+    .help { margin:20px 0 0; }
+    [hidden] { display:none !important; }
+    @media (max-width:560px) {
+      .site-header { padding:16px; }
+      main { padding-top:34px; }
+      .panel { border-radius:18px; padding:19px; }
+      .details { grid-template-columns:1fr; }
+      .result-head { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./">AURA <small>ETHNIC STUDIO</small></a>
+    <a class="back-link" href="./">BACK TO STORE</a>
+  </header>
+  <main>
+    <section class="heading">
+      <span class="eyebrow">SECURE ORDER TRACKING</span>
+      <h1>Where is your order?</h1>
+      <p>Enter the Tracking ID from your WhatsApp order message and the last 4 digits of the phone number used while ordering.</p>
+    </section>
+    <section class="panel">
+      <form id="tracking-form">
+        <label>TRACKING ID<input id="order-id" name="orderId" placeholder="AES-260820-ABCD" autocomplete="off" maxlength="40" required></label>
+        <label>LAST 4 PHONE DIGITS<input id="phone-last4" name="phoneLast4" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="3210" autocomplete="off" required></label>
+        <button type="submit">TRACK ORDER</button>
+      </form>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+      <div id="result" hidden></div>
+    </section>
+    <p class="help">Need help? Message Aura Ethnic Studio on the same WhatsApp chat used for your order.</p>
+  </main>
+  <script src="./tracking-config.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      var API_ORIGIN = String(window.AURA_TRACKING_API_ORIGIN || "").replace(/\/+$/, "");
+      var API_URL = API_ORIGIN + "/api/track";
+      var form = document.getElementById("tracking-form");
+      var message = document.getElementById("message");
+      var result = document.getElementById("result");
+
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(/[&<>"']/g, function (character) {
+          return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character];
+        });
+      }
+
+      function formatDate(value) {
+        if (!value) return "";
+        var date = new Date(value);
+        return Number.isNaN(date.getTime()) ? value : date.toLocaleString("en-IN", {dateStyle:"medium",timeStyle:"short"});
+      }
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        var button = form.querySelector("button");
+        message.className = "message";
+        message.textContent = "Checking your order…";
+        result.hidden = true;
+        button.disabled = true;
+        try {
+          if (!API_ORIGIN) throw new Error("Tracking service is being connected. Please try again shortly.");
+          var response = await fetch(API_URL, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+              orderId:document.getElementById("order-id").value,
+              phoneLast4:document.getElementById("phone-last4").value
+            })
+          });
+          var data = await response.json();
+          if (!response.ok) throw new Error(data.message || "Order could not be found.");
+
+          message.textContent = "";
+          result.hidden = false;
+          if (data.trackingLocked) {
+            result.innerHTML = '<div class="locked"><span class="pill pending">Payment Pending</span><h2>Please complete the payment</h2><p>Your order <b>' + escapeHtml(data.order.orderId) + '</b> is safely created. Full tracking will unlock as soon as Aura Ethnic Studio confirms your payment.</p></div>';
+            return;
+          }
+
+          var order = data.order;
+          var rank = {order_created:1,dispatch:2,delivery_partner:3,delivered:4}[order.fulfillmentStatus] || 1;
+          var steps = [
+            ["Order Created",true],
+            ["Payment Received",true],
+            ["Dispatch",rank >= 2],
+            ["Delivery Partner",rank >= 3],
+            ["Delivered",rank >= 4]
+          ];
+          var timeline = steps.map(function (step) {
+            return '<li class="' + (step[1] ? "done" : "") + '"><span>' + (step[1] ? "✓" : "") + '</span><b>' + step[0] + '</b></li>';
+          }).join("");
+          var details = "";
+          if (order.deliveryPartner) details += '<div><small>Delivery partner</small><b>' + escapeHtml(order.deliveryPartner) + '</b></div>';
+          if (order.courierTrackingId) details += '<div><small>Courier tracking ID</small><b>' + escapeHtml(order.courierTrackingId) + '</b></div>';
+          if (order.expectedDelivery) details += '<div><small>Expected delivery</small><b>' + escapeHtml(order.expectedDelivery) + '</b></div>';
+
+          result.innerHTML = '<div class="result-head"><div><small>TRACKING ID</small><h2>' + escapeHtml(order.orderId) + '</h2></div><span class="pill received">' + escapeHtml(order.currentLabel) + '</span></div><ol class="timeline">' + timeline + '</ol>' + (details ? '<div class="details">' + details + '</div>' : "") + (order.publicNote ? '<p class="note">' + escapeHtml(order.publicNote) + '</p>' : "") + '<p class="updated">Last updated: ' + escapeHtml(formatDate(order.updatedAt)) + '</p>';
+        } catch (error) {
+          message.className = "message error";
+          message.textContent = error && error.message ? error.message : "Tracking is temporarily unavailable. Please try again.";
+        } finally {
+          button.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,808 @@
+:root {
+  --aura-upgrade-brown: #4b2b25;
+  --aura-upgrade-ink: #281d19;
+  --aura-upgrade-cream: #fbf6f2;
+  --aura-upgrade-line: rgba(75, 43, 37, 0.14);
+}
+
+/* Icon-led mobile navigation with a dedicated saved-styles view. */
+.mobile-bottom-nav .aura-nav-icon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 19px;
+  justify-content: center;
+  width: 19px;
+}
+
+.mobile-bottom-nav .aura-nav-icon svg {
+  fill: none;
+  height: 18px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  width: 18px;
+}
+
+.mobile-bottom-nav .aura-nav-label {
+  display: block;
+}
+
+.mobile-bottom-nav .aura-nav-home::before,
+.mobile-bottom-nav .aura-nav-shop::before,
+.mobile-bottom-nav .aura-nav-search::before,
+.mobile-bottom-nav .aura-nav-bag::before {
+  display: block;
+  font: 400 18px/1 Georgia, serif;
+  margin-bottom: 2px;
+}
+
+.mobile-bottom-nav .aura-nav-home::before {
+  content: "⌂";
+}
+
+.mobile-bottom-nav .aura-nav-shop::before {
+  content: "◇";
+}
+
+.mobile-bottom-nav .aura-nav-search::before {
+  content: "⌕";
+}
+
+.mobile-bottom-nav .aura-nav-bag::before {
+  content: "▢";
+}
+
+.mobile-bottom-nav .aura-nav-home { order: 1; }
+.mobile-bottom-nav .aura-nav-shop { order: 2; }
+.mobile-bottom-nav .aura-nav-search { order: 3; }
+.mobile-bottom-nav .aura-wishlist-nav { order: 4; }
+.mobile-bottom-nav .aura-nav-bag { order: 5; }
+
+.mobile-bottom-nav .aura-nav-count {
+  align-items: center;
+  background: var(--aura-upgrade-brown);
+  border: 2px solid #fff;
+  border-radius: 999px;
+  color: #fff;
+  display: flex;
+  font-size: 7px;
+  font-weight: 800;
+  height: 17px;
+  justify-content: center;
+  min-width: 17px;
+  padding: 0 4px;
+  position: absolute;
+  right: calc(50% - 18px);
+  top: 2px;
+}
+
+.mobile-bottom-nav .aura-nav-count[hidden] {
+  display: none;
+}
+
+/* Wishlist drawer */
+.aura-wishlist-layer {
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  visibility: hidden;
+  z-index: 260;
+}
+
+.aura-wishlist-layer.is-open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.aura-wishlist-shade {
+  background: rgba(27, 18, 14, 0.58);
+  border: 0;
+  inset: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  transition: opacity 0.25s ease;
+  width: 100%;
+}
+
+.aura-wishlist-layer.is-open .aura-wishlist-shade {
+  opacity: 1;
+}
+
+.aura-wishlist-drawer {
+  background: #fff;
+  box-shadow: -24px 0 70px rgba(35, 23, 17, 0.24);
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(105%);
+  transition: transform 0.3s ease;
+  width: min(470px, 100%);
+}
+
+.aura-wishlist-layer.is-open .aura-wishlist-drawer {
+  transform: none;
+}
+
+.aura-wishlist-head {
+  align-items: center;
+  border-bottom: 1px solid var(--aura-upgrade-line);
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.aura-wishlist-head small {
+  color: #8c7166;
+  display: block;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 5px;
+}
+
+.aura-wishlist-head h2 {
+  font: 400 29px/1 Georgia, serif;
+  margin: 0;
+}
+
+.aura-wishlist-close {
+  align-items: center;
+  background: #f3e9e3;
+  border: 0;
+  border-radius: 50%;
+  color: var(--aura-upgrade-brown);
+  display: flex;
+  font-size: 22px;
+  height: 42px;
+  justify-content: center;
+  padding: 0;
+  width: 42px;
+}
+
+.aura-wishlist-list {
+  display: grid;
+  flex: 1;
+  gap: 11px;
+  overflow: auto;
+  padding: 15px;
+}
+
+.aura-wishlist-card {
+  align-items: center;
+  background: var(--aura-upgrade-cream);
+  border: 1px solid var(--aura-upgrade-line);
+  border-radius: 13px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 80px minmax(0, 1fr) auto;
+  padding: 8px;
+}
+
+.aura-wishlist-card img {
+  background: #eee3dc;
+  border-radius: 9px;
+  height: 104px;
+  object-fit: contain;
+  width: 80px;
+}
+
+.aura-wishlist-card small,
+.aura-wishlist-card strong,
+.aura-wishlist-card span {
+  display: block;
+}
+
+.aura-wishlist-card small {
+  color: #8a6d62;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+}
+
+.aura-wishlist-card strong {
+  display: -webkit-box;
+  font: 400 15px/1.35 Georgia, serif;
+  margin: 6px 0 9px;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.aura-wishlist-card span {
+  color: var(--aura-upgrade-brown);
+  font: 600 18px Georgia, serif;
+}
+
+.aura-wishlist-card button {
+  background: var(--aura-upgrade-brown);
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  min-height: 43px;
+  padding: 0 12px;
+}
+
+.aura-wishlist-empty {
+  align-content: center;
+  color: #6f5b52;
+  display: grid;
+  justify-items: center;
+  min-height: 60dvh;
+  padding: 35px;
+  text-align: center;
+}
+
+.aura-wishlist-empty b {
+  color: var(--aura-upgrade-brown);
+  font: 400 55px Georgia, serif;
+}
+
+.aura-wishlist-empty h3 {
+  color: var(--aura-upgrade-ink);
+  font: 400 26px Georgia, serif;
+  margin: 7px 0;
+}
+
+.aura-wishlist-empty p {
+  font-size: 10px;
+  line-height: 1.65;
+  margin: 0 0 18px;
+}
+
+.aura-wishlist-empty button {
+  background: var(--aura-upgrade-brown);
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  min-height: 46px;
+  padding: 0 18px;
+}
+
+/* Recently viewed styles */
+.aura-recent {
+  background: #fff;
+  border-top: 1px solid var(--aura-upgrade-line);
+  overflow: hidden;
+}
+
+.aura-recent[hidden] {
+  display: none;
+}
+
+.aura-recent-head {
+  align-items: end;
+  display: flex;
+  gap: 25px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.aura-recent-head small {
+  color: #8b6558;
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  margin-bottom: 9px;
+}
+
+.aura-recent-head h2 {
+  font: 400 clamp(34px, 4vw, 52px)/1 Georgia, serif;
+  margin: 0;
+}
+
+.aura-recent-head button {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #8f6b5f;
+  color: #6d4a40;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  min-height: 38px;
+  padding: 0 3px;
+}
+
+.aura-recent-rail {
+  display: grid;
+  gap: 11px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.aura-recent-card {
+  background: #fff;
+  border: 1px solid var(--aura-upgrade-line);
+  border-radius: 13px;
+  color: var(--aura-upgrade-ink);
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+}
+
+.aura-recent-card img {
+  aspect-ratio: 4 / 5;
+  background: #f2e8e2;
+  display: block;
+  object-fit: contain;
+  width: 100%;
+}
+
+.aura-recent-card > span {
+  display: grid;
+  min-height: 102px;
+  padding: 12px;
+}
+
+.aura-recent-card small {
+  color: #8d7064;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.aura-recent-card strong {
+  display: -webkit-box;
+  font: 400 15px/1.35 Georgia, serif;
+  margin: 5px 0 8px;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.aura-recent-card b {
+  color: var(--aura-upgrade-brown);
+  font: 600 17px Georgia, serif;
+}
+
+/* Product share and mobile gallery controls */
+.aura-product-actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  margin: 2px 0 15px;
+}
+
+.aura-product-actions button,
+.aura-product-actions a {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #cdbbb1;
+  border-radius: 8px;
+  color: var(--aura-upgrade-brown);
+  display: flex;
+  font-size: 7px;
+  font-weight: 800;
+  gap: 9px;
+  justify-content: center;
+  letter-spacing: 0.9px;
+  min-height: 44px;
+  padding: 0 10px;
+}
+
+.aura-product-actions svg {
+  fill: none;
+  height: 16px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+  width: 16px;
+}
+
+.aura-product-actions a {
+  background: #f1e5de;
+  border-color: #e1cbc0;
+}
+
+.aura-gallery-zoom {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.94);
+  border: 0;
+  border-radius: 50%;
+  color: var(--aura-upgrade-brown);
+  display: flex;
+  font-size: 18px;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: 13px;
+  top: 13px;
+  width: 40px;
+  z-index: 4;
+}
+
+.product-gallery > img {
+  cursor: zoom-in;
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.product-gallery.aura-is-zoomed > img {
+  cursor: zoom-out;
+  transform: scale(1.72);
+}
+
+.aura-swipe-hint {
+  background: rgba(36, 28, 25, 0.72);
+  border-radius: 999px;
+  bottom: 82px;
+  color: #fff;
+  font-size: 7px;
+  left: 50%;
+  letter-spacing: 0.7px;
+  padding: 7px 10px;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.aura-mini-toast {
+  background: #2d2420;
+  border-radius: 999px;
+  bottom: 88px;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  left: 50%;
+  letter-spacing: 0.6px;
+  max-width: calc(100vw - 30px);
+  padding: 11px 16px;
+  position: fixed;
+  text-align: center;
+  transform: translateX(-50%);
+  z-index: 330;
+}
+
+/* Install prompt appears only when the browser confirms installation support. */
+.aura-install-banner {
+  align-items: center;
+  background: #2b2420;
+  border-radius: 14px;
+  bottom: 18px;
+  box-shadow: 0 18px 60px rgba(28, 18, 14, 0.27);
+  color: #fff;
+  display: grid;
+  gap: 13px;
+  grid-template-columns: 42px minmax(0, 1fr) auto auto;
+  left: 50%;
+  max-width: calc(100vw - 24px);
+  padding: 12px;
+  position: fixed;
+  transform: translateX(-50%);
+  width: 620px;
+  z-index: 320;
+}
+
+.aura-install-mark {
+  align-items: center;
+  background: #ead9cf;
+  border-radius: 10px;
+  color: var(--aura-upgrade-brown);
+  display: flex;
+  font: 600 18px Georgia, serif;
+  height: 42px;
+  justify-content: center;
+}
+
+.aura-install-banner strong,
+.aura-install-banner small {
+  display: block;
+}
+
+.aura-install-banner strong {
+  font: 400 17px Georgia, serif;
+}
+
+.aura-install-banner small {
+  color: #cdbeb7;
+  font-size: 8px;
+  margin-top: 3px;
+}
+
+.aura-install-banner button {
+  border: 0;
+  border-radius: 8px;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  min-height: 40px;
+  padding: 0 13px;
+}
+
+body:has(.product-layer) .aura-install-banner,
+body:has(.checkout-layer) .aura-install-banner,
+body:has(.cart-layer.open) .aura-install-banner,
+body:has(.aura-wishlist-layer.is-open) .aura-install-banner {
+  display: none;
+}
+
+.aura-install-accept {
+  background: #fff;
+  color: var(--aura-upgrade-brown);
+}
+
+.aura-install-dismiss {
+  background: transparent;
+  color: #d9c9c1;
+}
+
+@media (width <= 760px) {
+  .aura-recent {
+    padding: 49px 12px;
+  }
+
+  .aura-recent-head {
+    margin-bottom: 18px;
+  }
+
+  .aura-recent-head h2 {
+    font-size: 34px;
+  }
+
+  .aura-recent-rail {
+    display: flex;
+    gap: 9px;
+    margin-inline: -12px;
+    overflow-x: auto;
+    padding: 2px 12px 10px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .aura-recent-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .aura-recent-card {
+    flex: 0 0 58vw;
+    scroll-snap-align: start;
+  }
+
+  .aura-swipe-hint {
+    bottom: 65px;
+  }
+}
+
+@media (width <= 620px) {
+  body.aura-overlay-open {
+    overflow: hidden;
+  }
+
+  .mobile-bottom-nav {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .mobile-bottom-nav a,
+  .mobile-bottom-nav button {
+    align-content: center;
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+    padding: 2px 1px;
+    position: relative;
+  }
+
+  .mobile-bottom-nav .aura-wishlist-nav {
+    border-right: 1px solid var(--aura-upgrade-line);
+  }
+
+  .mobile-bottom-nav .aura-nav-bag {
+    border-right: 0;
+  }
+
+  .mobile-bottom-nav .aura-nav-label {
+    font-size: 6.5px;
+    letter-spacing: 0.45px;
+    line-height: 1;
+  }
+
+  .mobile-bottom-nav .aura-nav-count,
+  .mobile-bottom-nav b {
+    margin: 0;
+    position: absolute;
+    right: calc(50% - 20px);
+    top: 1px;
+  }
+
+  .aura-wishlist-drawer {
+    border-radius: 22px 22px 0 0;
+    height: min(92dvh, 820px);
+    top: auto;
+    bottom: 0;
+    transform: translateY(105%);
+  }
+
+  .aura-wishlist-layer.is-open .aura-wishlist-drawer {
+    transform: none;
+  }
+
+  .aura-wishlist-head {
+    padding: 16px 15px;
+  }
+
+  .aura-wishlist-list {
+    padding: 12px 10px calc(80px + env(safe-area-inset-bottom));
+  }
+
+  .aura-wishlist-card {
+    grid-template-columns: 70px minmax(0, 1fr) auto;
+    gap: 9px;
+  }
+
+  .aura-wishlist-card img {
+    height: 92px;
+    width: 70px;
+  }
+
+  .aura-wishlist-card button {
+    padding-inline: 10px;
+  }
+
+  .aura-gallery-zoom {
+    height: 38px;
+    right: 9px;
+    top: 57px;
+    width: 38px;
+  }
+
+  .aura-install-banner {
+    bottom: calc(73px + env(safe-area-inset-bottom));
+    gap: 9px;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    padding: 10px;
+  }
+
+  .aura-install-mark {
+    height: 38px;
+  }
+
+  .aura-install-banner strong {
+    font-size: 15px;
+  }
+
+  .aura-install-dismiss {
+    grid-column: 1 / -1;
+    min-height: 30px !important;
+  }
+}
+
+@media (width <= 370px) {
+  .mobile-bottom-nav .aura-nav-label {
+    font-size: 6px;
+  }
+
+  .aura-wishlist-card {
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+  }
+
+  .aura-wishlist-card img {
+    height: 82px;
+    width: 62px;
+  }
+
+  .aura-wishlist-card strong {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-wishlist-shade,
+  .aura-wishlist-drawer,
+  .product-gallery > img {
+    transition: none;
+  }
+}
+
+
+/* Automatic order tracking access */
+.aura-tracking-access {
+  align-items: center;
+  background: linear-gradient(135deg, #2d211d, #56352d);
+  color: #fff;
+  display: grid;
+  gap: 34px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding-block: clamp(45px, 7vw, 78px);
+}
+
+.aura-tracking-copy {
+  max-width: 720px;
+}
+
+.aura-tracking-copy small {
+  color: #dcbfb1;
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  margin-bottom: 13px;
+}
+
+.aura-tracking-copy h2 {
+  font: 400 clamp(36px, 5vw, 62px)/1 Georgia, serif;
+  margin: 0 0 13px;
+}
+
+.aura-tracking-copy p {
+  color: #e1d5cf;
+  font-size: 11px;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 630px;
+}
+
+.aura-tracking-access > a {
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  color: var(--aura-upgrade-brown);
+  display: flex;
+  font-size: 8px;
+  font-weight: 800;
+  gap: 28px;
+  letter-spacing: 1px;
+  min-height: 54px;
+  padding: 0 20px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.aura-tracking-access > a b {
+  font: 400 19px Georgia, serif;
+}
+
+.aura-track-nav {
+  color: var(--aura-upgrade-brown) !important;
+  font-weight: 800 !important;
+}
+
+.aura-order-error {
+  background: #fff0ee;
+  border: 1px solid #e6bdb6;
+  border-radius: 8px;
+  color: #913a30;
+  font-size: 9px;
+  line-height: 1.5;
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.aura-order-error:empty {
+  display: none;
+}
+
+@media (width <= 760px) {
+  .aura-tracking-access {
+    gap: 25px;
+    grid-template-columns: 1fr;
+    padding: 48px 18px;
+    text-align: center;
+  }
+
+  .aura-tracking-copy {
+    margin: auto;
+  }
+
+  .aura-tracking-access > a {
+    justify-content: center;
+    width: 100%;
+  }
+}
