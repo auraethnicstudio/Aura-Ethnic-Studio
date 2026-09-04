@@ -577,6 +577,49 @@
     error.textContent = message || "";
   }
 
+  function showTrackingLoader() {
+    var layer = document.createElement("div");
+    layer.className = "aura-tracking-loader";
+    layer.setAttribute("role", "status");
+    layer.setAttribute("aria-live", "polite");
+    layer.setAttribute("aria-label", "Creating your Tracking ID");
+    layer.innerHTML = '<div class="aura-tracking-loader__card"><span class="aura-tracking-loader__spinner" aria-hidden="true"></span><small>SECURE ORDER SETUP</small><h2>Creating your Tracking ID…</h2><p>Please wait while we prepare your WhatsApp order.</p></div>';
+    document.body.appendChild(layer);
+    document.body.classList.add("aura-is-creating-order");
+    return layer;
+  }
+
+  function hideTrackingLoader(layer) {
+    if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
+    document.body.classList.remove("aura-is-creating-order");
+  }
+
+  function showPopupTrackingLoader(popup) {
+    if (!popup) return;
+    try {
+      popup.document.open();
+      popup.document.write([
+        '<!doctype html><html lang="en"><head><meta charset="utf-8">',
+        '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">',
+        '<title>Creating Aura order</title>',
+        '<style>',
+        ':root{color-scheme:light;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}',
+        '*{box-sizing:border-box}html,body{margin:0;min-height:100%}',
+        'body{align-items:center;background:radial-gradient(circle at top right,#ead8cc 0,transparent 31rem),#faf5f1;color:#281d19;display:flex;justify-content:center;min-height:100vh;min-height:100dvh;padding:clamp(18px,5vw,32px);text-align:center}',
+        '.card{background:#fff;border:1px solid #e6d9d2;border-radius:24px;box-shadow:0 24px 70px rgba(55,31,25,.16);padding:clamp(28px,7vw,42px) clamp(20px,7vw,38px);width:min(100%,390px)}',
+        '.spinner{animation:spin .8s linear infinite;border:5px solid #eadbd4;border-radius:50%;border-top-color:#4b2b25;display:block;height:58px;margin:0 auto 24px;width:58px}',
+        'small{color:#765047;display:block;font-size:10px;font-weight:850;letter-spacing:.16em;margin-bottom:12px}',
+        'h1{font:400 clamp(25px,7vw,32px)/1.12 Georgia,"Times New Roman",serif;letter-spacing:-.025em;margin:0 0 12px}',
+        'p{color:#796a62;font-size:14px;line-height:1.6;margin:0}',
+        '@keyframes spin{to{transform:rotate(360deg)}}',
+        '@media(max-width:420px){.card{border-radius:19px}.spinner{height:52px;width:52px}}',
+        '@media(prefers-reduced-motion:reduce){.spinner{animation-duration:1.8s}}',
+        '</style></head><body><main class="card"><span class="spinner" aria-hidden="true"></span><small>SECURE ORDER SETUP</small><h1>Creating your Tracking ID…</h1><p>Please wait. Your WhatsApp order will open automatically.</p></main></body></html>'
+      ].join(""));
+      popup.document.close();
+    } catch (error) {}
+  }
+
   function whatsappOrderMessage(data, trackingId) {
     return [
       "*AURA ETHNIC STUDIO — NEW ORDER*",
@@ -615,13 +658,9 @@
   async function createOrderThenOpenWhatsApp(form) {
     var button = form.querySelector('button[type="submit"]');
     var originalLabel = button ? button.textContent : "";
+    var loadingLayer = showTrackingLoader();
     var popup = window.open("", "aura-order-whatsapp");
-    if (popup) {
-      try {
-        popup.document.title = "Creating Aura order";
-        popup.document.body.textContent = "Creating your secure Tracking ID…";
-      } catch (error) {}
-    }
+    showPopupTrackingLoader(popup);
     if (button) {
       button.disabled = true;
       button.textContent = "CREATING TRACKING ID…";
@@ -679,6 +718,7 @@
       setOrderError(form, error && error.message ? error.message : "Order could not be created. Please try again.");
       showToast("Tracking ID was not created — please try again");
     } finally {
+      hideTrackingLoader(loadingLayer);
       if (button) {
         button.disabled = false;
         button.textContent = originalLabel;
