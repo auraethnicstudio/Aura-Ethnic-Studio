@@ -799,10 +799,15 @@ body.aura-is-creating-order {
   background: rgba(31, 20, 16, 0.72);
   display: flex;
   inset: 0;
+  height: 100vh;
+  height: 100dvh;
   justify-content: center;
+  min-height: 100vh;
   min-height: 100dvh;
+  overflow: hidden;
   overscroll-behavior: contain;
   padding: clamp(16px, 5vw, 30px);
+  width: 100vw;
   position: fixed;
   text-align: center;
   z-index: 2147483000;
@@ -815,7 +820,7 @@ body.aura-is-creating-order {
   box-shadow: 0 28px 80px rgba(20, 10, 7, 0.3);
   color: #281d19;
   padding: clamp(28px, 7vw, 42px) clamp(20px, 7vw, 38px);
-  width: min(100%, 390px);
+  width: min(390px, calc(100vw - 32px));
 }
 
 .aura-tracking-loader__spinner {
