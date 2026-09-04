@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "aura-storefront-v12";
+var CACHE_NAME = "aura-storefront-v13";
 var CORE_FILES = [
   "./",
   "./index.html",
@@ -18,7 +18,9 @@ var CORE_FILES = [
   "./search-enhancements.js",
   "./search-enhancements.css",
   "./premium-storefront.js?v=11",
-  "./premium-storefront.css?v=9"
+  "./premium-storefront.css?v=9",
+  "./aura-redesign.js?v=1",
+  "./aura-redesign.css?v=1"
 ];
 
 self.addEventListener("install", function (event) {
