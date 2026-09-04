@@ -63,7 +63,9 @@
         var data={};try{data=await response.json()}catch(error){}
         if(!response.ok){
           if(response.status===401){key="";sessionStorage.removeItem("aura_admin_token")}
-          throw new Error(data.message||"The request could not be completed.");
+          var requestError=new Error(data.message||"The request could not be completed.");
+          requestError.status=response.status;
+          throw requestError;
         }
         return data;
       }
@@ -84,11 +86,39 @@
         data.orders.forEach(function(order){ordersNode.appendChild(orderCard(order))});
       }
 
+      async function updateOrder(orderId,payload){
+        var cleanId=String(orderId||"").trim();
+        var encodedId=encodeURIComponent(cleanId);
+        var body=Object.assign({orderId:cleanId},payload);
+        var attempts=[
+          ["/api/admin/orders/"+encodedId,"PATCH",body],
+          ["/api/admin/orders/"+encodedId,"PUT",body],
+          ["/api/admin/orders","PATCH",body],
+          ["/api/admin/orders/update","POST",body]
+        ];
+        var lastError=null;
+        for(var i=0;i<attempts.length;i++){
+          try{return await request(attempts[i][0],{method:attempts[i][1],body:JSON.stringify(attempts[i][2])})}
+          catch(error){lastError=error;if(error.status!==404)throw error}
+        }
+        throw lastError||new Error("Could not save update.");
+      }
+
       async function save(card){
         var button=card.querySelector('[data-action="save"]'),saved=card.querySelector('.saved');
         var payload={};card.querySelectorAll('[data-name]').forEach(function(input){payload[input.dataset.name]=input.value.trim()});
         button.disabled=true;saved.textContent="Saving…";
-        try{var data=await request("/api/admin/orders/"+encodeURIComponent(card.dataset.orderId),{method:"PATCH",body:JSON.stringify(payload)});saved.textContent="Saved";var pill=card.querySelector('.pill');pill.textContent=data.order.currentLabel;pill.classList.toggle('received',data.order.paymentStatus==='received')}
+        try{
+          var data=await updateOrder(card.dataset.orderId,payload);
+          saved.textContent="Saved";
+          if(data&&data.order){
+            var pill=card.querySelector('.pill');
+            pill.textContent=data.order.currentLabel||pill.textContent;
+            pill.classList.toggle('received',data.order.paymentStatus==='received');
+          }else{
+            await load();
+          }
+        }
         catch(error){saved.textContent=error.message||"Could not save"}
         finally{button.disabled=false}
       }
