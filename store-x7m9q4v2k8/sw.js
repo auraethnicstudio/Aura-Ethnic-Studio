@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "aura-storefront-v14";
+var CACHE_NAME = "aura-storefront-v16";
 var CORE_FILES = [
   "./",
   "./index.html",
@@ -13,16 +13,9 @@ var CORE_FILES = [
   "./catalog-priority.js",
   "./security-guard.js",
   "./tracking-config.js?v=2",
-  "./assets/index-RrG8TB6h.js",
-  "./assets/index-CadshQGV.css",
-  "./search-enhancements.js",
-  "./search-enhancements.css",
-  "./premium-storefront.js?v=11",
-  "./premium-storefront.css?v=9",
-  "./aura-redesign.js?v=1",
-  "./aura-redesign.css?v=1",
-  "./tracking-hotfix.js?v=1",
-  "./tracking-hotfix.css?v=1"
+  "./assets/index-p7hJtkJI.js",
+  "./assets/index-BZNzUw1w.css",
+  "./storefront-runtime.js?v=3"
 ];
 
 self.addEventListener("install", function (event) {
@@ -57,11 +50,13 @@ self.addEventListener("fetch", function (event) {
       fetch(request).then(function (response) {
         var copy = response.clone();
         caches.open(CACHE_NAME).then(function (cache) {
-          cache.put("./index.html", copy);
+          cache.put(request, copy);
         });
         return response;
       }).catch(function () {
-        return caches.match("./index.html");
+        return caches.match(request).then(function (cached) {
+          return cached || caches.match("./index.html");
+        });
       })
     );
     return;
