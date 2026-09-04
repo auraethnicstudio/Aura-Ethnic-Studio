@@ -35,7 +35,7 @@
     (function(){
       "use strict";
       var origin=String(window.AURA_TRACKING_API_ORIGIN||"").replace(/\/+$/,"");
-      var key="";
+      var key=sessionStorage.getItem("aura_admin_token")||"";
       var loginPanel=document.getElementById("login-panel");
       var dashboard=document.getElementById("dashboard");
       var loginMessage=document.getElementById("login-message");
@@ -61,8 +61,19 @@
         if(!origin)throw new Error("Tracking service is not connected yet.");
         var response=await fetch(origin+path,Object.assign({},options||{},{headers:Object.assign({"Authorization":"Bearer "+key,"Content-Type":"application/json"},options&&options.headers||{})}));
         var data={};try{data=await response.json()}catch(error){}
-        if(!response.ok)throw new Error(data.message||"The request could not be completed.");
+        if(!response.ok){
+          if(response.status===401){key="";sessionStorage.removeItem("aura_admin_token")}
+          throw new Error(data.message||"The request could not be completed.");
+        }
         return data;
+      }
+
+      async function signIn(accessKey){
+        if(!origin)throw new Error("Tracking service is not connected yet.");
+        var response=await fetch(origin+"/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:accessKey})});
+        var data={};try{data=await response.json()}catch(error){}
+        if(!response.ok||!data.token)throw new Error(data.message||"Access denied.");
+        return data.token;
       }
 
       async function load(){
@@ -83,11 +94,13 @@
       }
 
       document.getElementById("login-form").addEventListener("submit",async function(event){
-        event.preventDefault();key=document.getElementById("admin-key").value.trim();loginMessage.textContent="";
-        try{await load();loginPanel.hidden=true;dashboard.hidden=false}catch(error){key="";loginMessage.textContent=error.message||"Access denied."}
+        event.preventDefault();var accessKey=document.getElementById("admin-key").value.trim();loginMessage.textContent="";
+        try{key=await signIn(accessKey);sessionStorage.setItem("aura_admin_token",key);await load();loginPanel.hidden=true;dashboard.hidden=false}
+        catch(error){key="";sessionStorage.removeItem("aura_admin_token");loginMessage.textContent=error.message||"Access denied."}
       });
       document.getElementById("refresh").addEventListener("click",function(){load().catch(function(error){dashboardMessage.textContent=error.message})});
-      document.getElementById("logout").addEventListener("click",function(){key="";document.getElementById("admin-key").value="";ordersNode.innerHTML="";dashboard.hidden=true;loginPanel.hidden=false});
+      document.getElementById("logout").addEventListener("click",function(){key="";sessionStorage.removeItem("aura_admin_token");document.getElementById("admin-key").value="";ordersNode.innerHTML="";dashboard.hidden=true;loginPanel.hidden=false});
+      if(key){load().then(function(){loginPanel.hidden=true;dashboard.hidden=false}).catch(function(){key="";sessionStorage.removeItem("aura_admin_token")})}
     })();
   </script>
 </body>
