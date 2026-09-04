@@ -1,0 +1,103 @@
+/* Tracking visibility hotfix — keeps the existing tracking system unchanged, only guarantees visible access. */
+#aura-track-order,
+.aura-tracking-access {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 2;
+}
+#aura-track-order {
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items: center;
+  gap: 32px;
+  margin: 0;
+  padding: 34px clamp(18px,5vw,76px);
+  background: linear-gradient(135deg,#25181d 0%,#4a2130 100%) !important;
+  color: #fff !important;
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+#aura-track-order .aura-tracking-copy small {
+  display: block;
+  margin-bottom: 8px;
+  color: #ead8ba !important;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+#aura-track-order .aura-tracking-copy h2 {
+  margin: 0 0 8px;
+  color: #fff !important;
+  font: 400 clamp(27px,3vw,40px)/1.05 Georgia,"Times New Roman",serif;
+}
+#aura-track-order .aura-tracking-copy p {
+  max-width: 680px;
+  margin: 0;
+  color: #ded2cc !important;
+  font-size: 11px;
+  line-height: 1.7;
+}
+#aura-track-order > a {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  min-width: 220px;
+  min-height: 54px;
+  padding: 0 20px;
+  color: #321720 !important;
+  background: #fff !important;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 999px !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.16);
+  text-decoration: none;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+#aura-track-order > a b { font: 400 20px Georgia,serif; }
+.aura-track-nav-hotfix {
+  color: #4a2130 !important;
+  font-weight: 800 !important;
+}
+.aura-mobile-track-pill {
+  display: none;
+}
+@media (max-width: 760px) {
+  #aura-track-order {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 34px 16px;
+    text-align: center;
+  }
+  #aura-track-order .aura-tracking-copy { margin: auto; }
+  #aura-track-order .aura-tracking-copy h2 { font-size: 31px; }
+  #aura-track-order .aura-tracking-copy p { font-size: 10.5px; }
+  #aura-track-order > a {
+    width: 100%;
+    min-height: 56px;
+    justify-content: center;
+  }
+  .aura-mobile-track-pill {
+    display: flex;
+    position: fixed;
+    right: 12px;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+    z-index: 115;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid rgba(255,255,255,.45);
+    border-radius: 999px;
+    background: #4a2130;
+    color: #fff;
+    box-shadow: 0 12px 32px rgba(52,20,31,.28);
+    text-decoration: none;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: .9px;
+  }
+  .aura-mobile-track-pill span { font-size: 15px; line-height: 1; }
+}
